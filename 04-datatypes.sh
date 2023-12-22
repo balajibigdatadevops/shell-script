@@ -5,7 +5,7 @@ NUMBER2=$2
 
 if [ $# -ne 2 ]
 then 
-    echo "pease execute script by following below usage:"
+    echo "please execute script by following below usage:"
     echo "Usage: <script name> <arg1> <arg2>"
     exit 1
 else 

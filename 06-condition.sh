@@ -4,7 +4,7 @@ NUMBER=$1
 
 if [ $# -ne 1 ]
 then 
-    echo "pease execute script by following below usage:"
+    echo "please execute script by following below usage:"
     echo "Usage: <script name> <arg1>"
     exit 1
 else 
