@@ -36,7 +36,7 @@ if [ $# -eq 0 ]
      echo "Please execute script by following below usage:"
      echo "<script name> <package1> <package2> <package3>"
      echo "Note: we can pass any no of package names by passing as space delimiter"
-     exit 1
+     exit 2
 else
      echo "script will install packages based on providing package names as command line args:"
 fi
