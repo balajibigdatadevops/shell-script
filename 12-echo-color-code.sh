@@ -15,3 +15,10 @@ echo -e "Hello Balaji, I am learning \e[35m shell \e[0m scripting"
 
 echo -e "Hello Balaji, I am learning \e[36m shell \e[0m scripting"
 
+##color codes
+# \e[31m for red
+# \e[32m for green
+# \e[33m for yellow
+# \e[34m for blue
+# \e[35m for cyron
+# \e[36m for different blue
