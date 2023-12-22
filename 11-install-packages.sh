@@ -17,6 +17,7 @@ VALIDATE()
  if [ $1 -ne 0 ]
   then
     echo -e "$2 ... $R FAILED $N"
+    exit 1
   else
     echo -e "$2 ... $G SUCCESS $N"
  fi
@@ -30,6 +31,15 @@ else
     echo "You are root user"
 fi # fi means reverse of if, indicating condition end
 
+if [ $# -eq 0 ]
+ then 
+     echo "Please execute script by following below usage:"
+     echo "<script name> <package1> <package2> <package3>"
+     echo "Note: we can pass any no of package names by passing as space delimiter"
+     exit 1
+else
+     echo "script will install packages based on providing package names as command line args:"
+fi
 #echo "All arguments are passed: $@"
 
 for each_package in $@
