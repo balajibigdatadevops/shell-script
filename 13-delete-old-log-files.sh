@@ -14,7 +14,7 @@ if [ ! -d $SOURCE_DIR ]
       echo -e "$G creating directory $SOURCE_DIR $N"
       mkdir -p /tmp/shellscript-logs &>> $LOGFILE
   else
-      echo -e "$Y directory $SOURCE_DIR exists $N"
+      echo -e "$Ydirectory $SOURCE_DIR exists $N"
 fi
 
 ##creating old log files using touch -d command
@@ -31,7 +31,9 @@ FILES_TO_DELETE=$(find $SOURCE_DIR  -type f  -name "*.log" -mtime +14)
 
 while IFS= read -r LINE
 do
-  echo "deleting old log files: $LINE" 
+  echo "started deleting old log files: on $TIMESTAMP $LINE" 
+  rm -rf $LINE
+  echo "completed deleting old files: on $TIMESTAMP $LINE"
 done <<<  $FILES_TO_DELETE
 
 
