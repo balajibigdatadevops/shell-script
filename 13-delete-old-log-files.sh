@@ -25,6 +25,7 @@ do
    touch -d 20231208 $Old_log_file/shipping.log &>> $LOGFILE
    touch -d 20231221 $Old_log_file/shipping.js &>> $LOGFILE
    touch -d 20231204 $Old_log_file/user.js &>> $LOGFILE
+   touch $Old_log_file/latest_$(date +%F).log &>> $LOGFILE
 done
 
 FILES_TO_DELETE=$(find $SOURCE_DIR  -type f  -name "*.log" -mtime +14)
