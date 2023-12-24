@@ -11,7 +11,7 @@ if [ ! -f $file ]
 then 
    echo -e "$R file:: $file does not exists $N"
 else
-   echo -e "$Y file: $file does exists$N"
+   echo -e "$Y file: $file does exists and displaying $file content $N"
 fi
 
 while IFS=":" read -r username password user_id group_id user_fullname user_homedir user_shell_path
