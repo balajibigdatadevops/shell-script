@@ -14,4 +14,6 @@ do
   fi     
 done <<< $DISK_USAGE
 
-echo -e "Messaage: $message"
+echo -e "Messaage for Disk Usage"
+echo "$message"
+
