@@ -2,7 +2,7 @@
 
 SOURCE_DIR="/tmp/shellscript-logs"
 TIMESTAMP=$(date +%F-%H-%M-%S)
-LOGFILE=$($0-$TIMESTAMP).log
+LOGFILE="$0-$TIMESTAMP.log"
 
 R="\e[31m"
 G="\e[32m"
