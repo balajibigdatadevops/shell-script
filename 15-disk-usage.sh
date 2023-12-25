@@ -17,3 +17,4 @@ done <<< $DISK_USAGE
 echo -e "Messaage for Disk Usage"
 echo -e "$message"
 
+echo "$message" | mail -s "High Disk Usage" balaji.hadoopdocs@gmail.com
