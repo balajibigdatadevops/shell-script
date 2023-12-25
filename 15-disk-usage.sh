@@ -10,11 +10,14 @@ do
   Partition=$(echo $LINE | awk '{print $1}')
   if [ $Usage -ge $DISK_THRESHOLD ]
     then 
-     message+="High Disk Usage on $Partition: $Usage\n"
+     message+="High Disk Usage on $Partition: $Usage<br>"
   fi     
 done <<< $DISK_USAGE
 
 echo -e "Messaage for Disk Usage"
 echo -e "$message"
 
-echo "$message" | mail -s "High Disk Usage" balaji.hadoopdocs@gmail.com
+##To test mail coming or not
+#echo "$message" | mail -s "High Disk Usage" balaji.hadoopdocs@gmail.com
+
+sh mail.sh "DevOps Team" "High Disk Usage" "$message" "balaji.hadoopdocs@gmail.com" "ALERT High Disk Usage"
