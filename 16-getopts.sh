@@ -4,16 +4,16 @@ while getopts ":a:b:" opt;
   do
    case $opt in
    a)
-   echo "Option 'a' with value $TEST"
+   echo "Option 'a' with value $OPTARG"
    ;;
    b)
-   echo "Option 'b' with value $TEST"
+   echo "Option 'b' with value $OPTARG"
    ;;
    \?)
-   echo "Invalid option:: $TEST"
+   echo "Invalid option:: $OPTARG"
    ;;
    :)
-   echo "Option - $TEST requires an argument"
+   echo "Option - $OPTARG requires an argument"
    ;;
    esac
   done
