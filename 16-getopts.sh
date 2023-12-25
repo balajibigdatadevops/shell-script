@@ -15,5 +15,5 @@ while getopts ":a:b:" opt;
    :)
    echo "Option - $OPTARG requires an argument"
    ;;
-   easc
+   esac
   done
