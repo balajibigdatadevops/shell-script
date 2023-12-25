@@ -1,6 +1,6 @@
 #!/bin/bash
 
-while getopt ":a:b:" opt;
+while getopts ":a:b:" opt;
   do
    case $opt in
    a)
