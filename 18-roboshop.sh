@@ -17,6 +17,6 @@ for each_instance in "${INSTANCES[@]}"
           INSTANCE_TYPE="t2.micro"
      fi       
  
-    aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$each_instance}]" --query 'Instances[0].PrivateIpAddress --output text
+    aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$each_instance}]" --query 'Instances[0].PrivateIpAddress' --output text
 
  done 
