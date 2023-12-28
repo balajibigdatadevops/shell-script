@@ -1,18 +1,17 @@
 #!/bin/bash
 
-
 AMI_ID=ami-03265a0778a880afb
 SG_ID=sg-002c9cdb8a04c9b4c
 INSTANCES=("mongo" "redis" "mysql" "rabbitmq" "catalogue" "user" "cart" "shipping" "payment" "web")
 ZONE_ID=Z0216330F2XRXARU66P1
 DOMAIN_NAME="balajibigdatadevops.online"
-PRIVATE=PrivateIpAddress
-PUBLIC=PublicIPAddress
+
 
 
 ##defining function to create instance and create or update A record for roboshop components
 instance_route53_func()
 {
+    PRIVATE=PrivateIpAddress
     If [ $PRIVATE == "PrivateIpAddress" ]
 	then
 	IP_ADDRESS=$(aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]" --query 'Instances[0].$Private' --output text)
@@ -40,8 +39,9 @@ instance_route53_func()
         }
         }]
     }
-	else 
+	else
 	
+	PUBLIC=PrivateIpAddress
     IP_ADDRESS=$(aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]" --query 'Instances[0].$Private' --output text)
 	
 	Take_public_IP=$(aws --region us-east-1 ec2 describe-instances --filters "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[*].[PrivateIpAddress, PublicIpAddress]' --output text | awk -F " " '{print $2}')
