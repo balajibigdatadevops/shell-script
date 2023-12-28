@@ -14,7 +14,7 @@ PUBLIC=PublicIPAddress
 ##defining function to create instance and create or update A record for roboshop components
 instance_route53_func()
 {
-   for each_address in ${ADDRESS[@]}
+   for each_address in "${ADDRESS[@]}"
    do
     If [ $PRIVATE == "PrivateIpAddress" ]
 	then
@@ -65,8 +65,7 @@ instance_route53_func()
     }
 	
 	fi
-	
-	
+		
 	done
 }
 
