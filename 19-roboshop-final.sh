@@ -6,7 +6,6 @@ SG_ID=sg-002c9cdb8a04c9b4c
 INSTANCES=("mongo" "redis" "mysql" "rabbitmq" "catalogue" "user" "cart" "shipping" "payment" "web")
 ZONE_ID=Z0216330F2XRXARU66P1
 DOMAIN_NAME="balajibigdatadevops.online"
-ADDRESS=("private_ip" "public_ip")
 PRIVATE=PrivateIpAddress
 PUBLIC=PublicIPAddress
 
@@ -14,8 +13,6 @@ PUBLIC=PublicIPAddress
 ##defining function to create instance and create or update A record for roboshop components
 instance_route53_func()
 {
-   for each_address in "${ADDRESS[@]}"
-   do
     If [ $PRIVATE == "PrivateIpAddress" ]
 	then
 	IP_ADDRESS=$(aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]" --query 'Instances[0].$Private' --output text)
@@ -72,15 +69,12 @@ instance_route53_func()
     }
 	
 	fi
-		
-	done
 }
 
 
 for i in "${INSTANCES[@]}"
 do      
-    for each_address in "${ADDRESS[@]}"
-    do
+   
 	if [ $i == "mongodb" ] || [ $i == "mysql" ] || [ $i == "shipping" ] && [ $each_address == "private_ip" ]
     then
        INSTANCE_TYPE="t3.small"
@@ -92,7 +86,7 @@ do
 	INSTANCE_TYPE="t2.micro"
 	instance_route53_func
 	 fi	
-	done
+
  done
 
 
