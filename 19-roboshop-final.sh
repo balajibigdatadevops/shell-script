@@ -44,7 +44,7 @@ do
 	if [ $i == "web" ]
 	then
 	   INSTANCE_TYPE="t2.micro"
-	   
+	fi 
 	   IP_ADDRESS=$(aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]" --query 'Instances[0].PrivateIpAddress' --output text)
 		
 	TAKE_PUBLIC_IP=$(aws --region us-east-1 ec2 describe-instances --filters "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[*].[PrivateIpAddress, PublicIpAddress]' --output text | awk -F " " '{print $2}')
@@ -69,6 +69,5 @@ do
         }
         }]
     }
-	
-        '
+	        '
 done
