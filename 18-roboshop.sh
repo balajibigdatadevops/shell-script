@@ -1,8 +1,8 @@
 #!/bin/bash
 ## creating ec2 instances for roboshop-application
 
-AMI_ID="ami-03265a0778a880afb"
-SG_ID="sg-002c9cdb8a04c9b4c"
+AMI_ID=ami-03265a0778a880afb
+SG_ID=sg-002c9cdb8a04c9b4c
 INSTANCES=("mongo" "redis" "mysql" "rabbitmq" "user" "catalogue" "user" "cart" "shipping" "payment" web")
 
 for each_instance in "${INSTANCES[@]}"
@@ -17,6 +17,5 @@ for each_instance in "${INSTANCES[@]}"
 
     echo "instance name is ${each_instance}"
     
-    aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID --region us-east-1 -tags Key=Balaji,Value=$each_instance
-    
-done 
+    aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID 
+ done 
