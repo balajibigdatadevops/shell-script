@@ -19,7 +19,8 @@ instance_route53_func()
     If [[ $Private == "PrivateIpAddress" ]]
 	then
 	IP_ADDRESS=$(aws ec2 run-instances --image-id ami-03265a0778a880afb --instance-type $INSTANCE_TYPE --security-group-ids sg-087e7afb3a936fce7 --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]" --query 'Instances[0].$Private' --output text)
-    echo "$i: $IP_ADDRESS"
+    
+    echo "$each_address: $IP_ADDRESS"
 
     #create R53 record, make sure you delete existing record
     aws route53 change-resource-record-sets \
