@@ -18,8 +18,8 @@ for each_instance in "${INSTANCES[@]}"
           INSTANCE_TYPE="t2.micro"
      fi       
  
-    PRIVATE_IP_ADDRESS=$(aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$each_instance}]" --query 'Instances[0].PrivateIpAddress' --output text)
+    IP_ADDRESS=$(aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$each_instance}]" --query 'Instances[0].PrivateIpAddress' --output text)
    
-   aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID  --change-batch '{ "Comment": "creating a record set", "Changes": [ { "Action": "CREATE","ResourceRecordSet": { "Name": "$each_instance.$DOMAIN_NAME", "Type": "A", "TTL": 1, "ResourceRecords": [ { "Value": "$PRIVATE_IP_ADDRESS" } ] } } ] }'
+   aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID  --change-batch '{ "Comment": "creating a record set", "Changes": [ { "Action": "CREATE","ResourceRecordSet": { "Name": "$each_instance.$DOMAIN_NAME", "Type": "A", "TTL": 1, "ResourceRecords": [ { "Value": "$IP_ADDRESS" } ] } } ] }'
    
  done 
