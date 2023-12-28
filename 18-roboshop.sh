@@ -3,7 +3,7 @@
 
 AMI_ID=ami-03265a0778a880afb
 SG_ID=sg-002c9cdb8a04c9b4c
-INSTANCES=("mongo" "redis" "mysql" "rabbitmq" "user" "catalogue" "user" "cart" "shipping" "payment" "web")
+INSTANCES=("mongo","redis","mysql","rabbitmq","user","catalogue","user","cart","shipping","payment","web")
 
 for each_instance in "${INSTANCES[@]}"
   do
