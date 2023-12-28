@@ -72,6 +72,6 @@ do
       INSTANCE_TYPE="t2.micro"
 	  ##calling function
 	  instance_create_route53
-	
+	fi
 	done
 done
