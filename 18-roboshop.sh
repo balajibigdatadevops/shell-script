@@ -17,4 +17,5 @@ for each_instance in "${INSTANCES[@]}"
      fi       
  
     aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID 
+    --tags "Key"="Balaji","Value"="$each_instance"
  done 
