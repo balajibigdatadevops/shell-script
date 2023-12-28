@@ -16,6 +16,6 @@ for each_instance in ${INSTANCES[@]}
 
      fi        
     echo "instance name is $each_instance"
-    aws2 ec2 run-instances --image-id $AMI_ID --instance-type t2.micro --security-group-ids $SG_ID --region us-east-1
-
+    aws2 ec2 run-instances --image-id $AMI_ID --instance-type t2.micro --security-group-ids $SG_ID --region us-east-1 -tags Key=Balaji,Value=$each_instance
+    
 done 
