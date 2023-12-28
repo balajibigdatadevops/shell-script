@@ -7,6 +7,7 @@ INSTANCES=("mongo" "redis" "mysql" "rabbitmq" "user" "catalogue" "user" "cart" "
 
 for each_instance in "${INSTANCES[@]}"
   do
+     echo "instance name is ${each_instance}"
    
      if [ $each_instance == "mongo" ] || [ $each_instance == "shipping" ] || [ $each_instance == "mysql" ] 
        then
@@ -14,8 +15,6 @@ for each_instance in "${INSTANCES[@]}"
        else
           INSTANCE_TYPE="t2.micro"
      fi       
-
-    echo "instance name is ${each_instance}"
-    
+ 
     aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID 
  done 
