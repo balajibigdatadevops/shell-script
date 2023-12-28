@@ -18,8 +18,8 @@ instance_route53_func()
    do
     If [ $Private == "PrivateIpAddress" ]
 	then
-	IP_ADDRESS=$(aws ec2 run-instances --image-id ami-03265a0778a880afb --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$each_instance}]" --query 'Instances[0].$Private' --output text)
-    
+	IP_ADDRESS=$(aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]" --query 'Instances[0].$Private' --output text)
+    echo "Displaying Private address"
     echo "$each_address: $IP_ADDRESS"
 
     #create R53 record, make sure you delete existing record
@@ -41,7 +41,8 @@ instance_route53_func()
         }]
     }
 	else [ $Public == "PublicIPAddress" ]
-	IP_ADDRESS=$(aws ec2 run-instances --image-id ami-03265a0778a880afb --instance-type $INSTANCE_TYPE --security-group-ids sg-087e7afb3a936fce7 --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]" --query 'Instances[0].$Public' --output text)
+	IP_ADDRESS=$(aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]" --query 'Instances[0].$Public' --output text)
+	echo "Displaying Public address"
     echo "$i: $IP_ADDRESS"
 
     #create R53 record, make sure you delete existing record
@@ -73,6 +74,7 @@ instance_route53_func()
 for i in "${INSTANCES[@]}"
 do      
     for each_address in "${ADDRESS[@]}"
+    do
 	if [ $i == "mongodb" ] || [ $i == "mysql" ] || [ $i == "shipping" ] && [ $each_address == "private_ip" ]
     then
        INSTANCE_TYPE="t3.small"
