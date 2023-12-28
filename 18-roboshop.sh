@@ -5,7 +5,7 @@ AMI_ID=ami-03265a0778a880afb
 SG_ID=sg-002c9cdb8a04c9b4c
 INSTANCES=("mongo" "redis" "mysql" "rabbitmq" "catalogue" "user" "cart" "shipping" "payment" "web")
 ZONE_ID=Z0216330F2XRXARU66P1
-DOMAIN_NAME"balajibigdatadevops.online"
+DOMAIN_NAME="balajibigdatadevops.online"
 
 for each_instance in "${INSTANCES[@]}"
   do
