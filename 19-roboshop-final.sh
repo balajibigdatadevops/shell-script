@@ -16,7 +16,7 @@ instance_route53_func()
 {
    for each_address in ${ADDRESS[@]}
    do
-    If [[ $Private == "PrivateIpAddress" ]]
+    If [ $Private == "PrivateIpAddress" ]
 	then
 	IP_ADDRESS=$(aws ec2 run-instances --image-id ami-03265a0778a880afb --instance-type $INSTANCE_TYPE --security-group-ids sg-087e7afb3a936fce7 --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]" --query 'Instances[0].$Private' --output text)
     
@@ -31,7 +31,7 @@ instance_route53_func()
         ,"Changes": [{
         "Action"              : "UPSERT"
         ,"ResourceRecordSet"  : {
-            "Name"              : "'$i'.'$DOMAIN_NAME'"
+            "Name"              : "'$each_address'.'$DOMAIN_NAME'"
             ,"Type"             : "A"
             ,"TTL"              : 1
             ,"ResourceRecords"  : [{
@@ -40,7 +40,7 @@ instance_route53_func()
         }
         }]
     }
-	elif [ $Public == "PublicIPAddress" ]
+	else [ $Public == "PublicIPAddress" ]
 	IP_ADDRESS=$(aws ec2 run-instances --image-id ami-03265a0778a880afb --instance-type $INSTANCE_TYPE --security-group-ids sg-087e7afb3a936fce7 --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]" --query 'Instances[0].$Public' --output text)
     echo "$i: $IP_ADDRESS"
 
@@ -53,7 +53,7 @@ instance_route53_func()
         ,"Changes": [{
         "Action"              : "UPSERT"
         ,"ResourceRecordSet"  : {
-            "Name"              : "'$i'.'$DOMAIN_NAME'"
+            "Name"              : "'$each_address'.'$DOMAIN_NAME'"
             ,"Type"             : "A"
             ,"TTL"              : 1
             ,"ResourceRecords"  : [{
