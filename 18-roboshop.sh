@@ -4,6 +4,7 @@
 AMI_ID=ami-03265a0778a880afb
 SG_ID=sg-002c9cdb8a04c9b4c
 INSTANCES=("mongo" "redis" "mysql" "rabbitmq" "user" "catalogue" "user" "cart" "shipping" "payment" "web")
+ZONE_ID=Z0216330F2XRXARU66P1
 
 for each_instance in "${INSTANCES[@]}"
   do
@@ -16,6 +17,6 @@ for each_instance in "${INSTANCES[@]}"
           INSTANCE_TYPE="t2.micro"
      fi       
  
-    aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$each_instance}]"
-    
+    aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$each_instance}]" --query 'Instances[0].PrivateIpAddress --output text
+
  done 
