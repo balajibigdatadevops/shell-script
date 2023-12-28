@@ -15,7 +15,7 @@ for each_instance in "${INSTANCES[@]}"
           INSTANCE_TYPE="t2.micro"
      fi       
 
-    echo "instance name is $each_instance"
+    echo "instance name is ${each_instance}"
     
     aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID --region us-east-1 -tags Key=Balaji,Value=$each_instance
     
