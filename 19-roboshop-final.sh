@@ -7,8 +7,8 @@ INSTANCES=("mongo" "redis" "mysql" "rabbitmq" "catalogue" "user" "cart" "shippin
 ZONE_ID=Z0216330F2XRXARU66P1
 DOMAIN_NAME="balajibigdatadevops.online"
 ADDRESS=("private_ip" "public_ip")
-Private="PrivateIpAddress"
-Public="PublicIPAddress"
+PRIVATE=PrivateIpAddress
+PUBLIC=PublicIPAddress
 
 
 ##defining function to create instance and create or update A record for roboshop components
@@ -16,7 +16,7 @@ instance_route53_func()
 {
    for each_address in ${ADDRESS[@]}
    do
-    If [ $Private == "PrivateIpAddress" ]
+    If [ $PRIVATE == "PrivateIpAddress" ]
 	then
 	IP_ADDRESS=$(aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]" --query 'Instances[0].$Private' --output text)
     echo "Displaying Private address"
@@ -40,8 +40,8 @@ instance_route53_func()
         }
         }]
     }
-	else [ $Public == "PublicIPAddress" ]
-	IP_ADDRESS=$(aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]" --query 'Instances[0].$Public' --output text)
+	else 
+    IP_ADDRESS=$(aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]" --query 'Instances[0].$Public' --output text)
 	echo "Displaying Public address"
     echo "$i: $IP_ADDRESS"
 
