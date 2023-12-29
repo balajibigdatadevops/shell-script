@@ -24,51 +24,27 @@ done
 
 EC2_NAME=$(aws ec2 describe-tags --region us-east-1 --filters "Name=resource-id,Values=$i" "Name=key,Values=Name" --output text | cut -f5 >/tmp/instance_names.txt)
 
-for each_instance in $(cat /tmp/instance_names.txt)
-do
-   if [ $each_instance == "web" ]
-      TAKE_PUBLIC_IP=$(aws --region us-east-1 ec2 describe-instances --filters "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[*].[PrivateIpAddress, PublicIpAddress]' --output text | awk -F " " '{print $2}')
+INSTANCE_ID=$(wget -q -O - http://169.254.169.254/latest/dynamic/instance-identity/document |grep "instanceId" | awk -F ":" '{print $2}' |tr -d \" | tr -d \, | tr -d '[:space:]' >/tmp/INSTANCE_ID.txt)
+
+for each_instance_id in $(cat /tmp/INSTANCE_ID.txt)
+ do
+   EC2_NAME=$(aws ec2 describe-tags --region us-east-1 --filters "Name=resource-id,Values=$each_instance_id" "Name=key,Values=Name" --output text | cut -f5 >/tmp/instance_names.txt)
+   
+   for each_instance_name in $(cat /tmp/instance_names.txt)
+     do
+      if [ $each_instance == "web" ]
+		
+		TAKE_PUBLIC_IP=$(aws --region us-east-1 ec2 describe-instances --filters "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[*].[PrivateIpAddress, PublicIpAddress]' --output text | awk -F " " '{print $2}')
+	
+		#create R53 record, make sure you it update A reord if already exists    
+		aws route53 change-resource-record-sets  --hosted-zone-id $ZONE_ID --change-batch ' {"Comment": "Creating a record set for cognito endpoint" ,"Changes": [{ "Action" : "UPSERT","ResourceRecordSet"  : {"Name" : "'$each_instance'.'$DOMAIN_NAME'","Type": "A","TTL": 1,"ResourceRecords"  : [{"Value": "'$TAKE_PUBLIC_IP'"}]}}]} '
+	
+    else
+    	TAKE_PRIVATE_IP=$(aws --region us-east-1 ec2 describe-instances --filters "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[*].[PrivateIpAddress, 	PublicIpAddress]' --output text | awk -F " " '{print $1}')
+    
+	#create R53 record, make sure you it update A reord if already exists
+	aws route53 change-resource-record-sets  --hosted-zone-id $ZONE_ID --change-batch ' {"Comment": "Creating a record set for cognito endpoint" ,"Changes": [{ "Action" : "UPSERT","ResourceRecordSet"  : {"Name" : "'$each_instance'.'$DOMAIN_NAME'","Type": "A","TTL": 1,"ResourceRecords"  : [{"Value" : "'$TAKE_PRIVATE_IP'"}]}}]} '
 	  
-	  
-    #create R53 record, make sure you it update A reord if already exists
-    aws route53 change-resource-record-sets \
-    --hosted-zone-id $ZONE_ID \
-    --change-batch '
-    {
-        "Comment": "Creating a record set for cognito endpoint"
-        ,"Changes": [{
-        "Action"              : "UPSERT"
-        ,"ResourceRecordSet"  : {
-            "Name"              : "'$each_instance'.'$DOMAIN_NAME'"
-            ,"Type"             : "A"
-            ,"TTL"              : 1
-            ,"ResourceRecords"  : [{
-                "Value"         : "'$TAKE_PUBLIC_IP'"
-            }]
-        }
-        }]
-    }
-        '
-	else
-	  TAKE_PRIVATE_IP=$(aws --region us-east-1 ec2 describe-instances --filters "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[*].[PrivateIpAddress, PublicIpAddress]' --output text | awk -F " " '{print $1}')
-	  #create R53 record, make sure you it update A reord if already exists
-    aws route53 change-resource-record-sets \
-    --hosted-zone-id $ZONE_ID \
-    --change-batch '
-    {
-        "Comment": "Creating a record set for cognito endpoint"
-        ,"Changes": [{
-        "Action"              : "UPSERT"
-        ,"ResourceRecordSet"  : {
-            "Name"              : "'$each_instance'.'$DOMAIN_NAME'"
-            ,"Type"             : "A"
-            ,"TTL"              : 1
-            ,"ResourceRecords"  : [{
-                "Value"         : "'$TAKE_PRIVATE_IP'"
-            }]
-        }
-        }]
-    }
-    '
-    fi
+     fi
+	 done
 done
