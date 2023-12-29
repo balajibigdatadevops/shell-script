@@ -17,29 +17,57 @@ do
     fi
 
     IP_ADDRESS=$(aws ec2 run-instances --image-id $AMI_ID --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]" --query 'Instances[0].PrivateIpAddress' --output text)
-		
-	TAKE_PRIVATE_IP=$(aws --region us-east-1 ec2 describe-instances --filters "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[*].[PrivateIpAddress, PublicIpAddress]' --output text | awk -F " " '{print $1}')
+
+    if [ $i != "web "]
+    then
+
+    	TAKE_PRIVATE_IP=$(aws --region us-east-1 ec2 describe-instances --filters "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[*].[PrivateIpAddress, PublicIpAddress]' --output text | awk -F " " '{print $1}')
 	
-	echo "instance Name $INSTANCES: PrivateIpAddress i.e $TAKE_PRIVATE_IP"	
+	    echo "instance Name $i: PrivateIp is $TAKE_PRIVATE_IP"	
     
-    #create R53 record, make sure you delete existing record
-    aws route53 change-resource-record-sets \
-    --hosted-zone-id $ZONE_ID \
-    --change-batch '
-    {
-        "Comment": "Creating a record set for cognito endpoint"
-        ,"Changes": [{
-        "Action"              : "UPSERT"
-        ,"ResourceRecordSet"  : {
-            "Name"              : "'$i'.'$DOMAIN_NAME'"
-            ,"Type"             : "A"
-            ,"TTL"              : 1
-            ,"ResourceRecords"  : [{
-                "Value"         : "'$TAKE_PRIVATE_IP'"
-            }]
-        }
-        }]
-    }
-	'	
+            #create R53 record, make sure you delete existing record
+            aws route53 change-resource-record-sets \
+            --hosted-zone-id $ZONE_ID \
+            --change-batch '
+                {
+                "Comment": "Creating a record set for cognito endpoint"
+                ,"Changes": [{
+                "Action"              : "UPSERT"
+                ,"ResourceRecordSet"  : {
+                    "Name"              : "'$i'.'$DOMAIN_NAME'"
+                    ,"Type"             : "A"
+                    ,"TTL"              : 1
+                    ,"ResourceRecords"  : [{
+                        "Value"         : "'$TAKE_PRIVATE_IP'"
+                    }]
+                }
+                }]
+                }
+            '
+    else 
+    TAKE_PUBLIC_IP=$(aws --region us-east-1 ec2 describe-instances --filters "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[*].[PrivateIpAddress, PublicIpAddress]' --output text | awk -F " " '{print $2}')
 	
+	    echo "instance Name $i: PrivateIp is $TAKE_PUBLIC_IP"	
+    
+            #create R53 record, make sure you delete existing record
+            aws route53 change-resource-record-sets \
+            --hosted-zone-id $ZONE_ID \
+            --change-batch '
+                {
+                "Comment": "Creating a record set for cognito endpoint"
+                ,"Changes": [{
+                "Action"              : "UPSERT"
+                ,"ResourceRecordSet"  : {
+                    "Name"              : "'$i'.'$DOMAIN_NAME'"
+                    ,"Type"             : "A"
+                    ,"TTL"              : 1
+                    ,"ResourceRecords"  : [{
+                        "Value"         : "'$TAKE_PUBLIC_IP'"
+                    }]
+                }
+                }]
+                }
+            '
+    fi
+
 done
