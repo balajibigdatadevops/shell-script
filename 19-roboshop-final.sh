@@ -20,6 +20,7 @@ do
 
     ROUTE_53_RECORDS=("mongo" "redis" "mysql" "rabbitmq" "catalogue" "user" "cart" "shipping" "payment" "web")
     for each_instance in "${ROUTE_53_RECORDS[@]}"
+    do
     if [ $each_instance != "web" ]
     then
 
