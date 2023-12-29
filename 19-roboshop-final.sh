@@ -47,7 +47,7 @@ do
     else 
     TAKE_PUBLIC_IP=$(aws --region us-east-1 ec2 describe-instances --filters "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[*].[PrivateIpAddress, PublicIpAddress]' --output text | awk -F " " '{print $2}')
 	
-	    echo "instance Name $i: PrivateIp is $TAKE_PUBLIC_IP"	
+	    echo "instance Name $i: PublicIp is $TAKE_PUBLIC_IP"	
     
             #create R53 record, make sure you delete existing record
             aws route53 change-resource-record-sets \
